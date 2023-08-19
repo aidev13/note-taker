@@ -5,6 +5,8 @@ const app = express()
 const PORT = 3000
 const db = require('./db/db.json')
 
+app.use(express.static('public'))
+
 //router for index.html
 
 app.get('/', (req, res) => {
@@ -21,6 +23,7 @@ app.get('/notes', (req, res) => {
 app.get('/api/notes', (req, res) => {
     res.json(db)
 })
+
 
 //router to redirect to index.html
 
