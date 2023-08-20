@@ -30,7 +30,7 @@ app.get('/api/notes', (req, res) => {
 })
 
 
-//router to redirect to index.html
+//router to redirect to index.html when a 404 type param is typed
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname,'public', 'index.html'))
 })
@@ -44,6 +44,7 @@ const newNote = {
     ...req.body,
     id: generateId()
 }
+
 note.push(newNote)
 await writeFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(note, null, 2))
 readFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(note, null, 2)) //this line works to push to side bar, but Im not sure if there is another way...
