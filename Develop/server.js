@@ -4,7 +4,7 @@ const { readFile, writeFile } = require('fs/promises')
 const path = require('path')
 const express = require('express') // requiring in express
 const app = express() // turning express into a variable
-const PORT = 3000 // extablishing a PORT number
+const PORT = process.env.PORT || 3000 //port setup for heroku with fallback
 const db = require('./db/db.json')
 const { generateId } = require('../utils/generateid')
 
