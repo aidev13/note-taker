@@ -5,14 +5,14 @@ const express = require('express') // requiring in express
 const app = express() // turning express into a variable
 const PORT = 3000 // extablishing a PORT number
 const db = require('./db/db.json')
-const { generaterId } = require('../utils/generateid.js')
-
-app.use(express.static('public')) //middleware - allows brower access to css and js files
-app.use(express.json()) //middleware = request json data
+const { generateId } = require('../utils/generateid')
 
 //middleware used to parse data 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(express.json()) //middleware = request json data
+app.use(express.static('public')) //middleware - allows brower access to css and js files
+
 
 //router for index.html
 app.get('/', (req, res) => {
@@ -37,11 +37,19 @@ app.get('*', (req, res) => {
 
 //router for creating content
 app.post('/api/notes', async (req, res) => {
-    
-const content = await readFile(path.join(__dirname, 'db', 'db.json'))
-console.log(content)
+const content = await readFile(path.join(__dirname, 'db', 'db.json'), 'utf-8')
+const toDo = JSON.parse(content)
 
-res.send("Post hit")
+//not needed, but for fun
+const newToDo = {
+    ...req.body,
+    id: generateId()
+}
+
+toDo.push(newToDo)
+await writeFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(toDo, null, 2))
+
+res.status(201).json(newToDo)
 })
 
 //route listener
