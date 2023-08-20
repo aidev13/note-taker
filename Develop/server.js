@@ -1,4 +1,5 @@
 
+
 const { readFile, writeFile } = require('fs/promises')
 const path = require('path')
 const express = require('express') // requiring in express
@@ -9,7 +10,6 @@ const { generateId } = require('../utils/generateid')
 
 //middleware used to parse data 
 app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
 app.use(express.json()) //middleware = request json data
 app.use(express.static('public')) //middleware - allows brower access to css and js files
 
@@ -37,20 +37,21 @@ app.get('*', (req, res) => {
 
 //router for creating content
 app.post('/api/notes', async (req, res) => {
-const content = await readFile(path.join(__dirname, 'db', 'db.json'), 'utf-8')
-const toDo = JSON.parse(content)
+    const content = await readFile(path.join(__dirname, 'db', 'db.json'), 'utf-8')
+const note = JSON.parse(content)
 
-//not needed, but for fun
-const newToDo = {
+const newNote = {
     ...req.body,
     id: generateId()
 }
+note.push(newNote)
+await writeFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(note, null, 2))
+readFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(note, null, 2)) //this line works to push to side bar, but Im not sure if there is another way...
 
-toDo.push(newToDo)
-await writeFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(toDo, null, 2))
+res.status(201).json(newNote)
 
-res.status(201).json(newToDo)
 })
+
 
 //route listener
 app.listen(PORT, () => {
