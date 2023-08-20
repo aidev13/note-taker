@@ -35,6 +35,13 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname,'public', 'index.html'))
 })
 
+app.get('/api/notes/:id', (req, res) => {
+
+    
+
+    res.json({})
+})
+
 //router for creating content
 app.post('/api/notes', async (req, res) => {
     const content = await readFile(path.join(__dirname, 'db', 'db.json'), 'utf-8')
