@@ -6,7 +6,7 @@ const express = require('express') // requiring in express
 const app = express() // turning express into a variable
 const PORT = process.env.PORT || 3000 //port setup for heroku with fallback
 const db = require('./db/db.json')
-const { generateId } = require('../utils/generateid')
+const { generateId } = require('./utils/generateid')
 
 //middleware used to parse data 
 app.use(express.urlencoded({ extended: true }))
@@ -34,10 +34,6 @@ app.get('/api/notes', (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname,'public', 'index.html'))
 })
-
-
-
-
 
 
 app.get('/api/notes/:id', (req, res) => {
