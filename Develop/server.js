@@ -36,6 +36,11 @@ app.get('*', (req, res) => {
 })
 
 
+
+
+
+
+
 app.get('/api/notes/:id', (req, res) => {
 
     res.json({})
