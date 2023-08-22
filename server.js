@@ -5,7 +5,7 @@ const path = require('path')
 const express = require('express') // requiring in express
 const app = express() // turning express into a variable
 const PORT = process.env.PORT || 3000 //port setup for heroku with fallback
-const db = require('./db.json')
+const db = require('./db/db.json')
 const { generateId } = require('./utils/generateid')
 
 //middleware used to parse data 
@@ -43,7 +43,7 @@ app.get('/api/notes/:id', (req, res) => {
 
 //router for creating content
 app.post('/api/notes', async (req, res) => {
-    const content = await readFile(path.join(__dirname, 'db.json'), 'utf-8')
+    const content = await readFile(path.join(__dirname, 'db', 'db.json'), 'utf-8')
 const note = JSON.parse(content)
 
 const newNote = {
