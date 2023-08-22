@@ -53,7 +53,7 @@ const newNote = {
 
 note.push(newNote)
 await writeFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(note, null, 2))
-readFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(note, null, 2)) //this line works to push to side bar, but Im not sure if there is another way...
+// readFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(note, null, 2)) //this line works to push to side bar, but Im not sure if there is another way...
 
 res.status(201).json(newNote)
 
