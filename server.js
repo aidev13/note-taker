@@ -5,7 +5,7 @@ const path = require('path')
 const express = require('express') // requiring in express
 const app = express() // turning express into a variable
 const PORT = process.env.PORT || 3000 //port setup for heroku with fallback
-const db = require('./db/db.json')
+
 const { generateId } = require('./utils/generateid')
 
 //middleware used to parse data 
@@ -25,14 +25,10 @@ app.get('/notes', (req, res) => {
 })
 
 //router for API/notes to render db.json
-app.get('/api/notes', (req, res) => {
-    res.json(db)
-})
-
-
-//router to redirect to index.html when a 404 type param is typed
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname,'public', 'index.html'))
+app.get('/api/notes', async (req, res) => {
+    const content = await readFile(path.join(__dirname, 'db', 'db.json'), 'utf-8')
+const notes = JSON.parse(content)
+    res.json(notes)
 })
 
 
@@ -59,6 +55,10 @@ res.status(201).json(newNote)
 
 })
 
+//router to redirect to index.html when a 404 type param is typed
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname,'public', 'index.html'))
+})
 
 //route listener
 app.listen(PORT, () => {
