@@ -32,22 +32,32 @@ app.get('/api/notes', async (req, res) => {
 })
 
 //for deleting
-app.delete('/api/notes/:id', (req, res) => {
+app.delete('/api/notes/:id', async (req, res) => {
+    const id = parseFloat(req.params.id)
+    const content = await readFile(path.join(__dirname, 'db', 'db.json'), 'utf-8')
+    const notes = JSON.parse(content)
+    const noteIndex = notes.findIndex(note => {
+        return note.id === id
+    })
+
+    notes.splice(noteIndex, 1)
+    await writeFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(notes, null, 2))
+    
     res.json({})
 })
 
 //router for creating content
 app.post('/api/notes', async (req, res) => {
     const content = await readFile(path.join(__dirname, 'db', 'db.json'), 'utf-8')
-    const note = JSON.parse(content)
+    const notes = JSON.parse(content)
 
     const newNote = {
         ...req.body,
         id: generateId()
     }
 
-    note.push(newNote)
-    await writeFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(note, null, 2))
+    notes.push(newNote)
+    await writeFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(notes, null, 2))
     // readFile(path.join(__dirname, 'db', 'db.json'), JSON.stringify(note, null, 2)) //this line works to push to side bar, but Im not sure if there is another way...
 
     res.status(201).json(newNote)
